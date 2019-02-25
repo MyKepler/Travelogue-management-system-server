@@ -14,32 +14,33 @@ database : 'travelogue_system'
 connection.connect();
 //SQL语句
 var  sql = 'SELECT * FROM article left join user on article.authorId=user.id';
-var  addSql = "INSERT INTO user(account,password) VALUES('heyuan','123456')";
+var  sqlById = "SELECT * FROM article left join user on article.authorId=user.id where article.id=?";
 
 router.get('/', function(req, res, next) {
     //解析请求参数
     var params = URL.parse(req.url, true).query;
-      var addSqlParams = [params.account, params.password];
-      
-      //增
-    // connection.query(addSql,addSqlParams,function (err, result) {
-    //     if(err){
-    //      console.log('[INSERT ERROR] - ',err.message);
-    //      return;
-    //     }             
-    // });
-    
-    //查
-    connection.query(sql,function (err, result) {
+    var sqlByIdParams = params.id;
+    console.log(params, sqlByIdParams,133)
+    if(sqlByIdParams) {
+      connection.query(sqlById,sqlByIdParams,function (err, result) {
         if(err) {
           console.log('[SELECT ERROR] - ',err.message);
           return;
         }
-        console.log(params.id);
-        
+        res.send(result);
+      });
+    }
+    else{
+      connection.query(sql,function (err, result) {
+        if(err) {
+          console.log('[SELECT ERROR] - ',err.message);
+          return;
+        }
         //把搜索值输出
-       res.send(result);
-    });
+        res.send(result);
+      });
+    }
+
 });
 
 module.exports = router;

@@ -5,9 +5,12 @@ var cookieParser = require('cookie-parser');//解析Cookie的工具,通过req.co
 var logger = require('morgan');//在控制台中，显示req请求的信息
 
 // 路由信息（接口地址），存放在routes的根目录
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var add = require('./routes/add');
+// var indexRouter = require('./routes/index');
+// var usersRouter = require('./routes/users');
+// var add = require('./routes/add');
+var selectArticle = require('./routes/HomePage/selectArticle');
+var login = require('./routes/base/login');
+var register = require('./routes/base/register');
 // var edit = require('./routes/edit');
 // var del = require('./routes/del');
 
@@ -25,9 +28,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //配置路由，（'自定义路径'，上面设置的接口地址）
-app.use('/', indexRouter);
-app.use('/users', usersRouter);//查
-app.use('/add', add);//增
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);//查
+// app.use('/add', add);//增
+app.use('/selectArticle',selectArticle);
+app.use('/login',login);
+app.use('/register',register);
 // app.use('/edit', edit);//改
 // app.use('/del', del);//删
 

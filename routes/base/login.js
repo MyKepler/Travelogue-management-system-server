@@ -13,13 +13,13 @@ database : 'travelogue_system'
 //执行创建连接 
 connection.connect();
 //SQL语句
-var  sql = 'SELECT * FROM article left join user on article.authorId=user.id';
+var  sql = 'SELECT * FROM user where telephone=? and password=?';
 var  addSql = "INSERT INTO user(account,password) VALUES('heyuan','123456')";
 
 router.get('/', function(req, res, next) {
     //解析请求参数
     var params = URL.parse(req.url, true).query;
-      var addSqlParams = [params.account, params.password];
+      var SqlParams = [params.telephone, params.password];
       
       //增
     // connection.query(addSql,addSqlParams,function (err, result) {
@@ -30,7 +30,7 @@ router.get('/', function(req, res, next) {
     // });
     
     //查
-    connection.query(sql,function (err, result) {
+    connection.query(sql,SqlParams,function (err, result) {
         if(err) {
           console.log('[SELECT ERROR] - ',err.message);
           return;
