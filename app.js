@@ -5,15 +5,13 @@ var cookieParser = require('cookie-parser');//解析Cookie的工具,通过req.co
 var logger = require('morgan');//在控制台中，显示req请求的信息
 
 // 路由信息（接口地址），存放在routes的根目录
-// var indexRouter = require('./routes/index');
-// var usersRouter = require('./routes/users');
-// var add = require('./routes/add');
 var selectArticle = require('./routes/HomePage/selectArticle');
+var sendArticle = require('./routes/HomePage/sendArticle');
+var comment = require('./routes/HomePage/comment');
 var login = require('./routes/base/login');
 var register = require('./routes/base/register');
-// var edit = require('./routes/edit');
-// var del = require('./routes/del');
-
+var changeInfo = require('./routes/Personal/changeInfo');
+var follow = require('./routes/Personal/follow');
 var app = express();
 
 // 模板开始
@@ -28,14 +26,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //配置路由，（'自定义路径'，上面设置的接口地址）
-// app.use('/', indexRouter);
-// app.use('/users', usersRouter);//查
-// app.use('/add', add);//增
-app.use('/selectArticle',selectArticle);
+app.use('/selectArticle',selectArticle);sendArticle
+app.use('/sendArticle',sendArticle);
+app.use('/comment',comment);
 app.use('/login',login);
 app.use('/register',register);
-// app.use('/edit', edit);//改
-// app.use('/del', del);//删
+app.use('/changeInfo',changeInfo);
+app.use('/follow',follow);
 
 // 错误处理
 app.use(function(req, res, next) {

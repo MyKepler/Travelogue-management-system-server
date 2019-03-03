@@ -13,15 +13,16 @@ database : 'travelogue_system'
 //执行创建连接 
 connection.connect();
 //SQL语句
-var  sql = 'SELECT * FROM article left join user on article.authorId=user.id';
+var  sql = 'SELECT *,article.id FROM article left join user on article.authorId=user.id';
 var  sqlById = "SELECT * FROM article left join user on article.authorId=user.id where article.id=?";
+var  sqlById2 = "SELECT * FROM article where authorId=?";
+var  sqlTime = 'SELECT *,article.id FROM article left join user on article.authorId=user.id Order By createDate Desc';
 
-router.get('/', function(req, res, next) {
+router.get('/searchByArticleId', function(req, res, next) {
     //解析请求参数
     var params = URL.parse(req.url, true).query;
     var sqlByIdParams = params.id;
     console.log(params, sqlByIdParams,133)
-    if(sqlByIdParams) {
       connection.query(sqlById,sqlByIdParams,function (err, result) {
         if(err) {
           console.log('[SELECT ERROR] - ',err.message);
@@ -29,18 +30,43 @@ router.get('/', function(req, res, next) {
         }
         res.send(result);
       });
-    }
-    else{
-      connection.query(sql,function (err, result) {
-        if(err) {
-          console.log('[SELECT ERROR] - ',err.message);
-          return;
-        }
-        //把搜索值输出
-        res.send(result);
-      });
-    }
+});
+router.get('/', function(req, res, next) {
+    connection.query(sql,function (err, result) {
+      if(err) {
+        console.log('[SELECT ERROR] - ',err.message);
+        return;
+      }
+      //把搜索值输出
+      res.send(result);
+    });
 
 });
+router.get('/searchByUserId', function(req, res, next) {
+  //解析请求参数
+  var params = URL.parse(req.url, true).query;
+  var sqlByIdParams = params.authorId;
+    connection.query(sqlById2,sqlByIdParams,function (err, result) {
+      if(err) {
+        console.log('[SELECT ERROR] - ',err.message);
+        return;
+      }
+      //把搜索值输出
+      res.send(result);
+    });
+
+});
+router.get('/searchByTime', function(req, res, next) {
+  connection.query(sqlTime,function (err, result) {
+    if(err) {
+      console.log('[SELECT ERROR] - ',err.message);
+      return;
+    }
+    //把搜索值输出
+    res.send(result);
+  });
+
+});
+
 
 module.exports = router;
