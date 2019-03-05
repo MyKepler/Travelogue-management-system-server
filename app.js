@@ -8,6 +8,7 @@ var logger = require('morgan');//在控制台中，显示req请求的信息
 var selectArticle = require('./routes/HomePage/selectArticle');
 var sendArticle = require('./routes/HomePage/sendArticle');
 var comment = require('./routes/HomePage/comment');
+var deleteArticle = require('./routes/HomePage/deleteArticle')
 var login = require('./routes/base/login');
 var register = require('./routes/base/register');
 var changeInfo = require('./routes/Personal/changeInfo');
@@ -33,6 +34,7 @@ app.use('/login',login);
 app.use('/register',register);
 app.use('/changeInfo',changeInfo);
 app.use('/follow',follow);
+app.use('/deleteArticle',deleteArticle);
 
 // 错误处理
 app.use(function(req, res, next) {

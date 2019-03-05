@@ -14,7 +14,7 @@ database : 'travelogue_system'
 connection.connect();
 //SQL语句
 var sql = 'SELECT *,article.id FROM article left join user on article.authorId=user.id';
-var sqlById = "SELECT * FROM article left join user on article.authorId=user.id where article.id=?";
+var sqlById = "SELECT *,article.id FROM article left join user on article.authorId=user.id where article.id=?";
 var sqlById2 = "SELECT * FROM article where authorId=?";
 var sqlTime = 'SELECT *,article.id FROM article left join user on article.authorId=user.id Order By createDate Desc';
 var sqlCondition = "SELECT * FROM article where source=? and destination=? and tripMember=? and tripDay=? and tripPay=? and";
