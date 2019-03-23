@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
  var URL = require('url');
+ var bodyParser = require("body-parser"); 
 //加载mysql模块
 var mysql      = require('mysql');
 //创建连接
@@ -16,27 +17,17 @@ connection.connect();
 var  sql = 'SELECT * FROM user where telephone=?';
 var  addSql = "INSERT INTO user(telephone,password) VALUES(?,?)";
 
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
     //解析请求参数
-    var params = URL.parse(req.url, true).query;
+    var params = req.body;
     var SqlParams = [params.telephone];
     var SqlAddParams = [params.telephone, params.password];
-      
-      //增
-    // connection.query(addSql,addSqlParams,function (err, result) {
-    //     if(err){
-    //      console.log('[INSERT ERROR] - ',err.message);
-    //      return;
-    //     }             
-    // });
-    
     //查
     connection.query(sql,SqlParams,function (err, result) {
         if(err) {
           console.log('[SELECT ERROR] - ',err.message);
           return;
         }
-        console.log(result,'xuxu')
         //把搜索值输出
         if(result.length == 0){
             connection.query(addSql,SqlAddParams,function (err, result) {
@@ -45,12 +36,12 @@ router.get('/', function(req, res, next) {
                 return;
                 }
                 else {
-                    res.send('success');
+                    res.send({code: 1, message: "success", result});
                 }             
             });
             }
         else {
-            res.send('fail');
+            res.send({code: 0, message: "fail", result});
         }
        
     });

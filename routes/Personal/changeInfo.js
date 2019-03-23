@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
- var URL = require('url');
+var bodyParser = require("body-parser");  
+var URL = require('url');
 //加载mysql模块
 var mysql      = require('mysql');
 //创建连接
@@ -18,22 +19,24 @@ var  infoSql = "UPDATE user set account=?,gender=?,city=?,motto=? where id=?";
 var  telSql = "UPDATE user set telephone=? where id=?";
 var  passwordSql = "UPDATE user set password=? where id=?";
 
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
   var params = URL.parse(req.url, true).query;
-  var sqlByIdParams = params.id;
+  // var sqlByIdParams = params.id;
+  var sqlByIdParams=req.body.id;  
+  // var password=req.body.password;  
   //查
   connection.query(sql,sqlByIdParams,function (err, result) {
     if(err) {
       console.log('[SELECT ERROR] - ',err.message);
       return;
     }
-    res.send(result);
+    res.send({code: 200, message: "success", result});
   });
 });
 
-router.get('/info', function(req, res, next) {
+router.post('/info', function(req, res, next) {
     //解析请求参数
-    var params = URL.parse(req.url, true).query;
+    var params = req.body;
     var SqlParams = [params.account, params.gender, params.city, params.motto, params.id];
     //查
     connection.query(infoSql,SqlParams,function (err, result) {
@@ -41,12 +44,12 @@ router.get('/info', function(req, res, next) {
           console.log('[SELECT ERROR] - ',err.message);
           return;
         }
-        res.send('success');
+        res.send({code: 200, message: "success", result});
     });
 });
-router.get('/tel', function(req, res, next) {
+router.post('/tel', function(req, res, next) {
   //解析请求参数
-  var params = URL.parse(req.url, true).query;
+  var params = req.body;
   var SqlParams = [params.telephone, params.id];
   //查
   connection.query(telSql,SqlParams,function (err, result) {
@@ -54,12 +57,12 @@ router.get('/tel', function(req, res, next) {
         console.log('[SELECT ERROR] - ',err.message);
         return;
       }
-      res.send('success');
+      res.send({code: 200, message: "success", result});
   });
 });
-router.get('/password', function(req, res, next) {
+router.post('/password', function(req, res, next) {
   //解析请求参数
-  var params = URL.parse(req.url, true).query;
+  var params = req.body;
   var SqlParams = [params.password, params.id];
   //查
   connection.query(passwordSql,SqlParams,function (err, result) {
@@ -67,7 +70,7 @@ router.get('/password', function(req, res, next) {
         console.log('[SELECT ERROR] - ',err.message);
         return;
       }
-      res.send('success');
+      res.send({code: 200, message: "success", result});
   });
 });
 

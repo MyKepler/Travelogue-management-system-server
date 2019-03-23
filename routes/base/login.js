@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
  var URL = require('url');
+ var bodyParser = require("body-parser"); 
 //加载mysql模块
 var mysql      = require('mysql');
 //创建连接
@@ -14,31 +15,19 @@ database : 'travelogue_system'
 connection.connect();
 //SQL语句
 var  sql = 'SELECT * FROM user where telephone=? and password=?';
-var  addSql = "INSERT INTO user(account,password) VALUES('heyuan','123456')";
 
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
     //解析请求参数
-    var params = URL.parse(req.url, true).query;
-      var SqlParams = [params.telephone, params.password];
-      
-      //增
-    // connection.query(addSql,addSqlParams,function (err, result) {
-    //     if(err){
-    //      console.log('[INSERT ERROR] - ',err.message);
-    //      return;
-    //     }             
-    // });
-    
+    var params = req.body;
+    var SqlParams = [params.telephone, params.password];
     //查
     connection.query(sql,SqlParams,function (err, result) {
         if(err) {
           console.log('[SELECT ERROR] - ',err.message);
           return;
         }
-        console.log(params.id);
-        
         //把搜索值输出
-       res.send(result);
+        res.send({code: 200, message: "success", result});
     });
 });
 

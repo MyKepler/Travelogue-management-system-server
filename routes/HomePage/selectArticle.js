@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
  var URL = require('url');
+ var bodyParser = require("body-parser"); 
 //加载mysql模块
 var mysql      = require('mysql');
 //创建连接
@@ -27,28 +28,27 @@ router.get('/', function(req, res, next) {
         return;
       }
       //把搜索值输出
-      res.send(result);
+      res.send({code: 200, message: "success", result});
     });
 
 });
 // 根据文章id选择文章
-router.get('/searchByArticleId', function(req, res, next) {
+router.post('/searchByArticleId', function(req, res, next) {
     //解析请求参数
-    var params = URL.parse(req.url, true).query;
+    var params = req.body;
     var sqlByIdParams = params.id;
-    console.log(params, sqlByIdParams,133)
       connection.query(sqlById,sqlByIdParams,function (err, result) {
         if(err) {
           console.log('[SELECT ERROR] - ',err.message);
           return;
         }
-        res.send(result);
+        res.send({code: 200, message: "success", result});
       });
 });
 // 根据作者id选择文章
-router.get('/searchByUserId', function(req, res, next) {
+router.post('/searchByUserId', function(req, res, next) {
   //解析请求参数
-  var params = URL.parse(req.url, true).query;
+  var params = req.body;
   var sqlByIdParams = params.authorId;
     connection.query(sqlById2,sqlByIdParams,function (err, result) {
       if(err) {
@@ -56,7 +56,7 @@ router.get('/searchByUserId', function(req, res, next) {
         return;
       }
       //把搜索值输出
-      res.send(result);
+      res.send({code: 200, message: "success", result});
     });
 
 });
@@ -68,7 +68,7 @@ router.get('/searchByTime', function(req, res, next) {
       return;
     }
     //把搜索值输出
-    res.send(result);
+    res.send({code: 200, message: "success", result});
   });
 
 });

@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
  var URL = require('url');
+ var bodyParser = require("body-parser"); 
 //加载mysql模块
 var mysql      = require('mysql');
 //创建连接
@@ -20,21 +21,21 @@ var  addSql = "INSERT INTO userfollowrelation(followId,beFollowedId) VALUES(?,?)
 var  removeSql = "DELETE from userfollowrelation where followId=? and beFollowedId=?";
 
 // 查询关注记录
-router.get('/', function(req, res, next) {
-    var params = URL.parse(req.url, true).query;
+router.post('/', function(req, res, next) {
+    var params = req.body;
     var sqlByIdParams = [params.followId, params.beFollowedId];
     connection.query(sql,sqlByIdParams,function (err, result) {
         if(err) {
           console.log('[SELECT ERROR] - ',err.message);
           return;
         }
-        res.send(result);
+        res.send({code: 200, message: "success", result});
       });
   });
 
 // 查询粉丝
-router.get('/myfans', function(req, res, next) {
-  var params = URL.parse(req.url, true).query;
+router.post('/myfans', function(req, res, next) {
+  var params = req.body;
   var sqlByIdParams = params.beFollowedId;
   //查
   connection.query(sqlfollowed,sqlByIdParams,function (err, result) {
@@ -42,13 +43,13 @@ router.get('/myfans', function(req, res, next) {
       console.log('[SELECT ERROR] - ',err.message);
       return;
     }
-    res.send(result);
+    res.send({code: 200, message: "success", result});
   });
 });
 
 // 查询关注
-router.get('/myfollow', function(req, res, next) {
-    var params = URL.parse(req.url, true).query;
+router.post('/myfollow', function(req, res, next) {
+    var params = req.body;
     var sqlByIdParams = params.followId;
     //查
     connection.query(sqlfollow,sqlByIdParams,function (err, result) {
@@ -56,13 +57,13 @@ router.get('/myfollow', function(req, res, next) {
         console.log('[SELECT ERROR] - ',err.message);
         return;
       }
-      res.send(result);
+      res.send({code: 200, message: "success", result});
     });
   });
 
 // 添加关注
-router.get('/addfollow', function(req, res, next) {
-    var params = URL.parse(req.url, true).query;
+router.post('/addfollow', function(req, res, next) {
+    var params = req.body
     var sqlByIdParams = [params.followId, params.beFollowedId];
     connection.query(sql,sqlByIdParams,function (err, result) {
         if(err) {
@@ -79,7 +80,7 @@ router.get('/addfollow', function(req, res, next) {
                 console.log('[SELECT ERROR] - ',err.message);
                 return;
             }
-            res.send(result);
+            res.send({code: 200, message: "success", result});
             });
         }
       });
@@ -87,8 +88,8 @@ router.get('/addfollow', function(req, res, next) {
   });
 
 // 取消关注
-router.get('/removefollow', function(req, res, next) {
-    var params = URL.parse(req.url, true).query;
+router.post('/removefollow', function(req, res, next) {
+    var params = req.body;
     var sqlByIdParams = [params.followId, params.beFollowedId];
     connection.query(sql,sqlByIdParams,function (err, result) {
         if(err) {
@@ -105,7 +106,7 @@ router.get('/removefollow', function(req, res, next) {
                 console.log('[SELECT ERROR] - ',err.message);
                 return;
             }
-            res.send(result);
+            res.send({code: 200, message: "success", result});
             });
         }
       });

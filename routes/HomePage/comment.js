@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var bodyParser = require("body-parser"); 
  var URL = require('url');
 //加载mysql模块
 var mysql      = require('mysql');
@@ -14,12 +15,12 @@ database : 'travelogue_system'
 connection.connect();
 //SQL语句
 var  sql = "SELECT * FROM articlecomment left join user on articlecomment.commenterId=user.id where articleId=?";
+var addsql = "INSERT INTO articlecomment(articleId,comment,commenterId) VALUES(?,?,?)"
 
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
     //解析请求参数
-    var params = URL.parse(req.url, true).query;
-      var SqlParams = params.articleId;
-    
+    var params = req.body;
+    var SqlParams = params.articleId;    
     //查
     connection.query(sql,SqlParams,function (err, result) {
         if(err) {
@@ -29,8 +30,24 @@ router.get('/', function(req, res, next) {
         console.log(params.articleId);
         
         //把搜索值输出
-       res.send(result);
+        res.send({code: 200, message: "success", result});
     });
+});
+router.post('/addComment', function(req, res, next) {
+  //解析请求参数
+  var params = req.body;
+  var SqlParams = [params.articleId,params.comment,params.commenterId];    
+  //查
+  connection.query(addsql,SqlParams,function (err, result) {
+      if(err) {
+        console.log('[SELECT ERROR] - ',err.message);
+        return;
+      }
+      console.log(params.articleId);
+      
+      //把搜索值输出
+      res.send({code: 200, message: "success", result});
+  });
 });
 
 module.exports = router;

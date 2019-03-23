@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
- var URL = require('url');
+var bodyParser = require("body-parser"); 
+var URL = require('url');
 //加载mysql模块
 var mysql      = require('mysql');
 //创建连接
@@ -15,9 +16,9 @@ connection.connect();
 //SQL语句
 var  addSql = "INSERT INTO article(authorId,title,content,location,tripMember,source,destination,tripDay,tripPay,category) VALUES(?,?,?,?,?,?,?,?,?,?)";
 
-router.get('/', function(req, res, next) {
+router.post('/', function(req, res, next) {
   //解析请求参数
-  var params = URL.parse(req.url, true).query;
+  var params = req.body;
   var SqlAddParams = [params.authorId, params.title, params.content, params.location, params.tripMember, 
     params.source, params.destination, params.tripDay, params.tripPay, params.category];
   
@@ -27,7 +28,7 @@ router.get('/', function(req, res, next) {
     return;
     }
     else {
-      res.send('success');
+      res.send({code: 200, message: "success", result});
     }
   });
 });

@@ -13,6 +13,11 @@ var login = require('./routes/base/login');
 var register = require('./routes/base/register');
 var changeInfo = require('./routes/Personal/changeInfo');
 var follow = require('./routes/Personal/follow');
+var upload = require('./routes/Personal/upload');
+var articleLike = require('./routes/HomePage/articleLike');
+var articleFavorite = require('./routes/HomePage/articleFavorite');
+var articleAdmin = require('./routes/Admin/article');
+var userAdmin = require('./routes/Admin/user');
 var app = express();
 
 // 模板开始
@@ -27,7 +32,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //配置路由，（'自定义路径'，上面设置的接口地址）
-app.use('/selectArticle',selectArticle);sendArticle
+app.use('/selectArticle',selectArticle);
 app.use('/sendArticle',sendArticle);
 app.use('/comment',comment);
 app.use('/login',login);
@@ -35,6 +40,11 @@ app.use('/register',register);
 app.use('/changeInfo',changeInfo);
 app.use('/follow',follow);
 app.use('/deleteArticle',deleteArticle);
+app.use('/upload',upload);
+app.use('/articleLike',articleLike);
+app.use('/articleFavorite',articleFavorite);
+app.use('/articleAdmin',articleAdmin);
+app.use('/userAdmin',userAdmin);
 
 // 错误处理
 app.use(function(req, res, next) {
