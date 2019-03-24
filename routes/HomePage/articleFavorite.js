@@ -75,7 +75,10 @@ router.post('/article', function(req, res, next) {
           console.log('[SELECT ERROR] - ',err.message);
           return;
         }
-        res.send({code: 200, message: "success", result});
+        var totalNum = result.length
+        result = result.slice((params.currentPage-1)*params.pageSize,params.currentPage*params.pageSize);
+        //把搜索值输出
+        res.send({code: 200, message: "success", result, totalNum});
     });
 });
 
