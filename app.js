@@ -18,6 +18,8 @@ var articleLike = require('./routes/HomePage/articleLike');
 var articleFavorite = require('./routes/HomePage/articleFavorite');
 var articleAdmin = require('./routes/Admin/article');
 var userAdmin = require('./routes/Admin/user');
+var dataAdmin = require('./routes/Admin/data');
+var timeLine = require('./routes/Personal/timeLine');
 var app = express();
 
 // 模板开始
@@ -45,6 +47,8 @@ app.use('/articleLike',articleLike);
 app.use('/articleFavorite',articleFavorite);
 app.use('/articleAdmin',articleAdmin);
 app.use('/userAdmin',userAdmin);
+app.use('/dataAdmin',dataAdmin);
+app.use('/timeLine',timeLine);
 
 // 错误处理
 app.use(function(req, res, next) {

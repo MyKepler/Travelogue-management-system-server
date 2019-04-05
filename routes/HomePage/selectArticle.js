@@ -23,17 +23,18 @@ var sqlById2 = "SELECT * FROM article where authorId=? and review=1";
 // 选择所有文章
 router.post('/', function(req, res, next) {
     var params = req.body;
+    var sqlByIdParams = params.id;
     var sql;
     if (params.category == 1) {
-      sql = 'SELECT *,article.id FROM article left join user on article.authorId=user.id where category=1 and review=1';
+      sql = 'select *,newtable.id from (select *  FROM (select befollowedId from userfollowrelation where followId = ?) as new left join article on new.befollowedId=article.authorId)  as newtable left join user on user.id=newtable.authorId where category=1 and review=1';
     } else if (params.category == 2) {
-      sql = 'SELECT *,article.id FROM article left join user on article.authorId=user.id where category=2 and review=1';
+      sql = 'select *,newtable.id from (select *  FROM (select befollowedId from userfollowrelation where followId = ?) as new left join article on new.befollowedId=article.authorId)  as newtable left join user on user.id=newtable.authorId where category=2 and review=1';
     } else if (params.category == 3) {
-      sql = 'SELECT *,article.id FROM article left join user on article.authorId=user.id where category=3 and review=1';
+      sql = 'select *,newtable.id from (select *  FROM (select befollowedId from userfollowrelation where followId = ?) as new left join article on new.befollowedId=article.authorId)  as newtable left join user on user.id=newtable.authorId where category=1 and review=1';
     } else {
-      sql = 'SELECT *,article.id FROM article left join user on article.authorId=user.id where review=1';
+      sql = 'select *,newtable.id from (select *  FROM (select befollowedId from userfollowrelation where followId = ?) as new left join article on new.befollowedId=article.authorId)  as newtable left join user on user.id=newtable.authorId where review=1';
     }
-    connection.query(sql,function (err, result) {
+    connection.query(sql,sqlByIdParams,function (err, result) {
       if(err) {
         console.log('[SELECT ERROR] - ',err.message);
         return;

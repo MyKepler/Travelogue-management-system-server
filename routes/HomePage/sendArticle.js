@@ -15,6 +15,7 @@ database : 'travelogue_system'
 connection.connect();
 //SQL语句
 var  addSql = "INSERT INTO article(authorId,title,content,location,tripMember,source,destination,tripDay,tripPay,category) VALUES(?,?,?,?,?,?,?,?,?,?)";
+var  uploadSql = "UPDATE article set authorId=?,title=?,content=?,location=?,tripMember=?,source=?,destination=?,tripDay=?,tripPay=?,category=?,review=? where id=?";
 
 router.post('/', function(req, res, next) {
   //解析请求参数
@@ -33,4 +34,20 @@ router.post('/', function(req, res, next) {
   });
 });
 
+router.post('/upload', function(req, res, next) {
+  //解析请求参数
+  var params = req.body;
+  var SqlAddParams = [params.authorId, params.title, params.content, params.location, params.tripMember, 
+    params.source, params.destination, params.tripDay, params.tripPay, params.category, params.review, params.id];
+  
+  connection.query(uploadSql,SqlAddParams,function (err, result) {
+    if(err){
+      console.log('[INSERT ERROR] - ',err.message);
+    return;
+    }
+    else {
+      res.send({code: 200, message: "success", result});
+    }
+  });
+});
 module.exports = router;

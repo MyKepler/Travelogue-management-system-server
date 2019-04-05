@@ -15,7 +15,8 @@ database : 'travelogue_system'
 connection.connect();
 //SQL语句
 var sql = 'SELECT * FROM user';
-var  reviewSql = "UPDATE user set state=? where id=?";
+var reviewSql = "UPDATE user set state=? where id=?";
+var adminSql = "UPDATE user set isadmin=? where id=?";
 
 // 选择所有用户
 router.post('/', function(req, res, next) {
@@ -50,5 +51,21 @@ router.post('/review', function(req, res, next) {
   });
 });
 
+// 用户禁用
+router.post('/isadmin', function(req, res, next) {
+  //解析请求参数
+  var params = req.body;
+  var SqlParams = [params.isadmin,params.id];
+  console.log(SqlParams)
+  connection.query(adminSql,SqlParams,function (err, result) {
+    if(err){
+      console.log('[INSERT ERROR] - ',err.message);
+      return;
+    }
+    else {
+      res.send({code: 200, message: "success", result});
+    }
+  });
+});
 
 module.exports = router;
