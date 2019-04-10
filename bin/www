@@ -20,7 +20,25 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-
+const io = require('socket.io')(server);
+let oSockets=[];
+io.sockets.on('connection', socket => {
+  console.log('用户链接成功')
+  oSockets.push(socket)
+  // 群聊
+  socket.on('sendMsg', data => {
+    socket.broadcast.emit('receiveMsg', data)
+  })
+  // 上线
+  socket.on('online', data => {
+    socket.broadcast.emit('online', data)
+  })
+  // 断开连接
+  socket.on('disconnect', () => {
+    oSockets.filter(item => item !== socket)
+    console.log('用户离线')
+  })
+});
 /**
  * Listen on provided port, on all network interfaces.
  */

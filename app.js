@@ -20,6 +20,7 @@ var articleAdmin = require('./routes/Admin/article');
 var userAdmin = require('./routes/Admin/user');
 var dataAdmin = require('./routes/Admin/data');
 var timeLine = require('./routes/Personal/timeLine');
+var chat = require('./routes/Chat/chat');
 var app = express();
 
 // 模板开始
@@ -49,6 +50,7 @@ app.use('/articleAdmin',articleAdmin);
 app.use('/userAdmin',userAdmin);
 app.use('/dataAdmin',dataAdmin);
 app.use('/timeLine',timeLine);
+app.use('/chat',chat);
 
 // 错误处理
 app.use(function(req, res, next) {

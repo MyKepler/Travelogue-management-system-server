@@ -14,14 +14,14 @@ database : 'travelogue_system'
 //执行创建连接 
 connection.connect();
 //SQL语句
-var  addSql = "INSERT INTO article(authorId,title,content,location,tripMember,source,destination,tripDay,tripPay,category) VALUES(?,?,?,?,?,?,?,?,?,?)";
+var  addSql = "INSERT INTO article(authorId,title,content,location,tripMember,source,destination,tripDay,tripPay,category,cover) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
 var  uploadSql = "UPDATE article set authorId=?,title=?,content=?,location=?,tripMember=?,source=?,destination=?,tripDay=?,tripPay=?,category=?,review=? where id=?";
 
 router.post('/', function(req, res, next) {
   //解析请求参数
   var params = req.body;
   var SqlAddParams = [params.authorId, params.title, params.content, params.location, params.tripMember, 
-    params.source, params.destination, params.tripDay, params.tripPay, params.category];
+    params.source, params.destination, params.tripDay, params.tripPay, params.category, params.cover];
   
   connection.query(addSql,SqlAddParams,function (err, result) {
     if(err){
@@ -38,7 +38,7 @@ router.post('/upload', function(req, res, next) {
   //解析请求参数
   var params = req.body;
   var SqlAddParams = [params.authorId, params.title, params.content, params.location, params.tripMember, 
-    params.source, params.destination, params.tripDay, params.tripPay, params.category, params.review, params.id];
+    params.source, params.destination, params.tripDay, params.tripPay, params.category, params.review,params.id];
   
   connection.query(uploadSql,SqlAddParams,function (err, result) {
     if(err){

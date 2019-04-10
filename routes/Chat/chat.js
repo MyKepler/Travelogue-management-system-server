@@ -1,25 +1,13 @@
+var express = require('express');
+var axios = require('axios');
+var router = express.Router();
 
-// 加载 express
-const express = require('express')
-// 加载 socket.io
-const socketIo = require('socket.io')
-// 加载 http
-const http = require('http')
-// 创建 app
-const app = express()
-// 创建 server
-const server = http.createServer(app)
-// 创建 sokcet
-const io = socketIo(server)
-// 保存用户
-const users = []
-// 当客户端连接时
-io.on('connection', socket => {
-  console.log('client is connect')
-  // 注册登录事件
-  socket.on('login', users => {
-    console.log(users)
-    // 发布登录成功事件 并发送消息
-    socket.emit('loginSucess', '登录成功')
-  })
-})
+router.post('/AI', function(req, res) {
+  //解析请求参数
+  console.log('req', req.body);
+  axios.get("http://111.231.92.206:3000/api/chat/AI", { params: { ...req.body, city:'未知', userId:777 } }).then(resData => {
+    console.log(resData.data.results);
+    res.send(JSON.stringify(resData.data));
+  }).catch((e) => {console.log('err', e)});
+});
+module.exports = router;
